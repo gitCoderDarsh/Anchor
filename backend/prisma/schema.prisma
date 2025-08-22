@@ -1,0 +1,26 @@
+// Prisma schema for sessions and tags
+// Save as backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  duration    Int      // in minutes
+  date        DateTime @default(now())
+  tags        Tag[]    @relation("SessionTags")
+}
+
+model Tag {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  sessions  Session[]  @relation("SessionTags")
+}
